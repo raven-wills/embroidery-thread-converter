@@ -146,7 +146,8 @@ The app comes with 400+ pre-loaded thread colors for immediate testing.
 ## 🎨 Screenshots
 
 ### Main Interface
-![Thread Converter Interface](screenshots/main-interface.png)
+![Thread Converter Interface](<img width="1440" alt="thread_converter_main_interface" src="https://github.com/user-attachments/assets/864e7055-6cb7-4f8c-9dd7-fc2ed8195455" />
+)
 
 ### Conversion Results
 ![Conversion Results](screenshots/conversion-results.png)
