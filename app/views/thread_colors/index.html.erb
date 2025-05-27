@@ -1,0 +1,202 @@
+<!-- app/views/thread_colors/index.html.erb -->
+<div class="container">
+  <div class="header">
+    <h1>Thread Color Conversion Tool</h1>
+    <p>Convert thread colors between different embroidery brands</p>
+  </div>
+
+  <div class="content">
+    <%= form_with url: root_path, method: :get, local: true,
+                  data: { turbo: false } do |form| %>
+
+      <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+        <div class="form-group" style="flex: 1;">
+          <%= form.label :from_brand, "Convert FROM:" %>
+          <%= form.select :from_brand,
+                         options_from_collection_for_select(@brands, :first, :last, @from_brand),
+                         { prompt: "Select brand..." },
+                         { onchange: "updateToBrandOptions()" } %>
+        </div>
+
+        <div class="form-group" style="flex: 1;">
+          <%= form.label :to_brand, "Convert TO:" %>
+          <%= form.select :to_brand,
+                         options_from_collection_for_select(@brands, :first, :last, @to_brand),
+                         { prompt: "Select brand..." } %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :thread_numbers, "Thread Numbers:" %>
+        <%= form.text_area :thread_numbers,
+                          value: @thread_numbers,
+                          placeholder: "Enter thread numbers in any format:\n• Comma-separated: 208, 209, 210\n• Line-separated (one per line)\n• Space-separated: 208 209 210",
+                          rows: 6 %>
+        <small style="color: #666; font-size: 0.9em;">
+          Supports multiple input formats - paste your list however it's formatted!
+        </small>
+      </div>
+
+      <%= form.submit "Convert Colors", name: "convert", class: "convert-btn" %>
+    <% end %>
+
+    <% if @conversion_results.any? %>
+      <div style="background: white; border-radius: 15px; padding: 30px; margin-top: 30px;">
+        <h3>Conversion Results: <%= @brands[@from_brand] %> → <%= @brands[@to_brand] %></h3>
+
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th><%= @brands[@from_brand] %></th>
+              <th><%= @brands[@to_brand] %></th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @conversion_results.each do |result| %>
+              <tr>
+                <td><%= result[:source_number] %></td>
+                <td>
+                  <% if result[:target_number] %>
+                    <%= result[:target_number] %>
+                  <% else %>
+                    <span style="color: #999; font-style: italic;">-</span>
+                  <% end %>
+                </td>
+                <td>
+                  <%= result[:found] ? "✓ Found" : "⚠ No conversion available" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+
+    <!-- Technical Notes -->
+    <div style="background: #f8f9fa; border-left: 4px solid #4facfe; padding: 20px; margin-top: 30px;">
+      <h4>Rails Implementation Architecture</h4>
+      <p><strong>Current Implementation (Rails 7):</strong></p>
+      <ul>
+        <li><strong>Database-Driven:</strong> PostgreSQL backend with ActiveRecord models for scalability</li>
+        <li><strong>Modern Rails:</strong> Uses Turbo, Stimulus, and Importmaps for enhanced UX</li>
+        <li><strong>RESTful Design:</strong> Clean controller actions following Rails conventions</li>
+        <li><strong>Flexible Queries:</strong> Handles multiple thread value formats with SQL LIKE queries</li>
+      </ul>
+
+      <p><strong>Future Enhancement Paths:</strong></p>
+      <ul>
+        <li><strong>Image Management:</strong> Active Storage integration for color swatch uploads</li>
+        <li><strong>API Development:</strong> JSON API endpoints for mobile app integration</li>
+        <li><strong>Admin Interface:</strong> Rails Admin or custom backend for brand/color management</li>
+        <li><strong>Advanced Search:</strong> Elasticsearch integration for fuzzy color matching</li>
+        <li><strong>Caching Layer:</strong> Redis caching for high-performance conversions</li>
+        <li><strong>Export Features:</strong> PDF/Excel generation with Prawn/RubyXL gems</li>
+        <li><strong>User Accounts:</strong> Devise authentication for saved conversion lists</li>
+        <li><strong>Background Jobs:</strong> Sidekiq for bulk import/export operations</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+  }
+
+  .content {
+    padding: 40px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  select, textarea, input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e1e5e9;
+    border-radius: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+
+  .convert-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  .results-table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    text-align: left;
+  }
+
+  .results-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+</style>
+
+<script>
+  function updateToBrandOptions() {
+    const fromSelect = document.querySelector('select[name="from_brand"]');
+    const toSelect = document.querySelector('select[name="to_brand"]');
+    const selectedFrom = fromSelect.value;
+
+    // Remove the selected 'from' brand from 'to' options
+    Array.from(toSelect.options).forEach(option => {
+      option.style.display = option.value === selectedFrom ? 'none' : 'block';
+    });
+
+    // If current 'to' selection matches 'from', reset it
+    if (toSelect.value === selectedFrom) {
+      toSelect.selectedIndex = 0;
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', updateToBrandOptions);
+</script>
