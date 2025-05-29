@@ -1,0 +1,42 @@
+brands:
+  dmc:
+    name: "DMC"
+    priority: 1
+  anchor:
+    name: "Anchor"
+    priority: 2
+  cosmo:
+    name: "Cosmo"
+    priority: 3
+  jp_coats:
+    name: "JP Coats"
+    priority: 4
+  sullivans:
+    name: "Sullivans"
+    priority: 5
+  presenica:
+    name: "Presenica"
+    priority: 6
+  madeira:
+    name: "Madeira"
+    priority: 7
+  appletons:
+    name: "Appletons"
+    priority: 8
+  kreinik:
+    name: "Kreinik"
+    priority: 9
+  luca_s:
+    name: "Luca-S"
+    priority: 10
+  semco:
+    name: "Semco"
+    priority: 11
+  olympus:
+    name: "Olympus"
+    priority: 12
+  y_d:
+    name: "Y/D"
+    priority: 13
+
+

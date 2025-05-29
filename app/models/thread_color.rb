@@ -1,4 +1,3 @@
-# app/models/thread_color.rb
 class ThreadColor < ApplicationRecord
   validates :dmc, presence: true, uniqueness: true
 
