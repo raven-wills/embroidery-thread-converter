@@ -1,4 +1,3 @@
-# app/controllers/thread_colors_controller.rb
 class ThreadColorsController < ApplicationController
   def index
     @brands = ThreadColor::BRAND_NAMES

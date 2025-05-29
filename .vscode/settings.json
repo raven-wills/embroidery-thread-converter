@@ -1,2 +1,6 @@
 {
+  "workbench.colorCustomizations": {
+    "tab.activeBorder": "#4ecdc4",
+    "tab.activeBackground": "#4ecdc4"
+  }
 }

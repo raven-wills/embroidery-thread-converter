@@ -1,9 +1,14 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+require 'yaml'
+
+# Load thread color data from YAML
+thread_colors = YAML.load_file(Rails.root.join('db', 'thread_colors.yml'))['colors']
+
+thread_colors.each do |data|
+  ThreadColor.find_or_create_by(dmc: data['dmc']) do |thread|
+    ThreadColor::BRANDS.each do |brand|
+      thread[brand] = data[brand]
+    end
+  end
+end
+
+puts "Seeded #{ThreadColor.count} thread colors"
