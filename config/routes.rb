@@ -18,4 +18,5 @@ end
 
   # Optional: Set as root route if you want
   root "thread_colors#index"
+  post "/", to: "thread_colors#index"
 end
